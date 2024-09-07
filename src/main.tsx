@@ -6,17 +6,24 @@ import { App } from "./screens/App";
 import { Layout } from "./screens/Layout";
 import { LandingPage } from "./screens/LandingPage";
 
+import AuthProvider from "./AuthProvider";
+import PrivateRoute from "./PrivateRoute";
+
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="/app" element={<App />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<LandingPage />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/app" element={<App />} />
+            </Route>
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );
