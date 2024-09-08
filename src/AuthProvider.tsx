@@ -34,16 +34,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     } = supabase.auth.onAuthStateChange((_, session) => {
       setSession(session ?? undefined);
     });
-    
+
     return () => subscription.unsubscribe();
   }, []);
 
   const getSession = async () => {
     const {
-      data: { session },
+      data: { session: newSession },
     } = await supabase.auth.getSession();
-    if (!!session) setSession(session);
-    return session;
+    if (!!newSession && !session) setSession(newSession);
+    return newSession;
   };
 
   const signIn = async () => {

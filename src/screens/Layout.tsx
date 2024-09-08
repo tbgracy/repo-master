@@ -7,19 +7,22 @@ import { Navbar } from "../components/Navbar";
 import { useAuth } from "../AuthProvider";
 
 export const Layout = () => {
-  const auth = useAuth();
-  const session = auth!.session;
-  
+  const { session, getSession } = useAuth()!;
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    auth?.getSession().then(() => {
+    getSession().then(() => {
       setIsLoading(false);
     });
   }, [session]);
 
   if (isLoading) {
-    return <div className="w-screen h-screen flex items-center justify-center">Loading ... </div>;
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        Loading ...{" "}
+      </div>
+    );
   }
 
   return (

@@ -1,7 +1,7 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { useGithubApi } from "../hooks/useGithubApi";
-import { useState } from "react";
 
 type RepositoryProps = {
   repo: Repository;
@@ -9,23 +9,37 @@ type RepositoryProps = {
 
 export const Repository = (props: RepositoryProps) => {
   const { repo } = props;
-  const [isLoading, setIsLoading] = useState(false);
+
   const { toggleVisibility } = useGithubApi();
 
-  const handleClick = () => {
-    setIsLoading(true);
-    toggleVisibility(repo).then(() => {
-      setIsLoading(false);
-    });
-  };
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: toggleVisibility,
+    onSuccess: (repo: Repository) => {
+      queryClient.setQueryData(
+        ["fetchRepositories"],
+        (oldData: Repository[]) => {
+          return oldData.map((r) => (r.id === repo.id ? repo : r));
+        }
+      );
+    },
+  });
+
+  if (mutation.error) {
+  }
 
   return (
     <article
       className={`w-full relative space-y-2 bg-white shadow-sm rounded-lg px-6 py-4 md:h-[10rem] overflow-y-scroll ${
-        isLoading && "cursor-wait"
+        mutation.isPending && "cursor-wait"
       }`}
     >
-      <h1 className="font-bold text-teal-600 w-[80%] text-ellipsis">{repo.name}</h1>
+      {mutation.error && (
+        <p className="text-sm text-red-500">{mutation.error.message}</p>
+      )}
+      <h1 className="font-bold text-teal-600 w-[80%] text-ellipsis">
+        {repo.name}
+      </h1>
       <ul className="flex gap-2 w-full flex-wrap">
         {repo.topics.map((t, k) => (
           <li
@@ -38,12 +52,13 @@ export const Repository = (props: RepositoryProps) => {
       </ul>
       <p className="text-sm">{repo.description}</p>
       <button
-        className={`absolute bg-teal-600 text-white p-2 rounded right-2 top-0 ${
-          !isLoading && "cursor-pointer"
+        className={`absolute bg-teal-600 text-white p-2 rounded right-2 top-0 w-8 h-8 ${
+          mutation.isPending && "bg-gray-400"
         }`}
-        onClick={handleClick}
+        title={repo.private ? "Make public" : "Make private"}
+        onClick={() => mutation.mutate(repo)}
       >
-        {repo.private ? <FaEyeSlash size="1.2rem" /> : <FaEye size="1.2rem" />}
+        {mutation.isPending ? "..." : repo.private ? <FaEyeSlash /> : <FaEye />}
       </button>
     </article>
   );
