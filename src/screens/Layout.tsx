@@ -23,7 +23,7 @@ export const Layout = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-between">
+    <div className="w-screen h-screen flex flex-col bg-gray-100 justify-between">
       <Navbar />
       <Outlet />
       <Footer />

@@ -1,4 +1,3 @@
-import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../AuthProvider";
@@ -18,19 +17,19 @@ export const LandingPage = () => {
       </h1>
       <p>RVT help you do just that.</p>
       {!auth?.session ? (
-        <Button
+        <button
           className="bg-teal-600 rounded-lg py-3 px-6 text-white"
           onClick={handleClick}
         >
           Login with your Github account to try it.
-        </Button>
+        </button>
       ) : (
-        <Button
+        <button
           className="bg-teal-600 rounded-lg py-3 px-6 text-white"
           onClick={() => navigate("/app")}
         >
           Try it
-        </Button>
+        </button>
       )}
     </div>
   );

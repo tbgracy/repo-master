@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import { Session } from "@supabase/supabase-js";
-import { useNavigate } from "react-router-dom";
 
 import { supabase } from "./supabase";
 
@@ -29,14 +28,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const appUrl = `${serverUrl}/app`;
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_, session) => {
       setSession(session ?? undefined);
     });
+    
     return () => subscription.unsubscribe();
   }, []);
 
