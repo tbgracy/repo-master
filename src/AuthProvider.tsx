@@ -8,6 +8,7 @@ import {
 import { Session } from "@supabase/supabase-js";
 
 import { supabase } from "./supabase";
+import { getServerUrl } from "./utils/getServerUrl";
 
 type AuthContextType = {
   session?: Session;
@@ -22,9 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | undefined>();
 
-  const serverUrl =
-    import.meta.env.VITE_APP_URL ||
-    `http://localhost:${import.meta.env.VITE_APP_PORT}`;
+  const serverUrl = getServerUrl();
 
   const appUrl = `${serverUrl}/app`;
 
