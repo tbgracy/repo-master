@@ -5,6 +5,24 @@ import { useAuth } from "../AuthProvider";
 export const useGithubApi = () => {
     const { session } = useAuth()!;
 
+    const toggleArchive = async (repo: Repository) => {
+        const octokit = new Octokit({
+            auth: session?.provider_token,
+        });
+
+        const result = await octokit
+            .request(`PATCH /repos/{owner}/{repo}`, {
+                owner: session?.user.user_metadata.preferred_username,
+                repo: repo.name,
+                archived: !repo.archived,
+                headers: {
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+            });
+
+        return result.data as Repository
+    }
+
     const toggleVisibility = async (repo: Repository) => {
         const octokit = new Octokit({
             auth: session?.provider_token,
@@ -40,5 +58,5 @@ export const useGithubApi = () => {
         return result.data as Repository[]
     }
 
-    return { toggleVisibility, fetchRepositories }
+    return { toggleVisibility, toggleArchive, fetchRepositories }
 }

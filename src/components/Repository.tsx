@@ -1,4 +1,5 @@
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { TbArchive, TbArchiveOff } from "react-icons/tb";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useGithubApi } from "../hooks/useGithubApi";
@@ -10,12 +11,34 @@ type RepositoryProps = {
 export const Repository = (props: RepositoryProps) => {
   const { repo } = props;
 
-  const { toggleVisibility } = useGithubApi();
+  const { toggleVisibility, toggleArchive } = useGithubApi();
 
   const queryClient = useQueryClient();
 
-  const { error, isPending, mutate } = useMutation({
+  const {
+    error: visibilityError,
+    isPending: isVisibilityPending,
+    mutate: mutateVisibility,
+  } = useMutation({
     mutationFn: toggleVisibility,
+    onSuccess: (updatedRepo: Repository) => {
+      queryClient.setQueryData(
+        ["fetchRepositories"],
+        (oldData: Repository[]) => {
+          return oldData.map((oldDataRepo) =>
+            oldDataRepo.id === updatedRepo.id ? updatedRepo : oldDataRepo
+          );
+        }
+      );
+    },
+  });
+
+  const {
+    error: archiveError,
+    isPending: isArchivingPending,
+    mutate: mutateArchive,
+  } = useMutation({
+    mutationFn: toggleArchive,
     onSuccess: (updatedRepo: Repository) => {
       queryClient.setQueryData(
         ["fetchRepositories"],
@@ -31,10 +54,15 @@ export const Repository = (props: RepositoryProps) => {
   return (
     <article
       className={`w-full relative space-y-2 bg-white shadow-sm rounded-lg px-6 py-4 md:h-[10rem] overflow-y-scroll ${
-        isPending && "cursor-wait"
+        isVisibilityPending && "cursor-wait"
       }`}
     >
-      {error && <p className="text-sm text-red-500">{error.message}</p>}
+      {(visibilityError || archiveError) && (
+        <>
+          <p className="text-sm text-red-500">{visibilityError?.message}</p>
+          <p className="text-sm text-red-500">{archiveError?.message}</p>
+        </>
+      )}
       <h1 className="font-bold text-teal-600 w-[80%] text-ellipsis">
         {repo.name}
       </h1>
@@ -49,15 +77,38 @@ export const Repository = (props: RepositoryProps) => {
         ))}
       </ul>
       <p className="text-sm">{repo.description}</p>
-      <button
-        className={`absolute bg-teal-600 text-white p-2 rounded right-2 top-0 w-8 h-8 ${
-          isPending && "bg-gray-400"
-        }`}
-        title={repo.private ? "Make public" : "Make private"}
-        onClick={() => mutate(repo)}
-      >
-        {isPending ? "..." : repo.private ? <FaEyeSlash /> : <FaEye />}
-      </button>
+      <div className="absolute right-2 top-0 space-x-2">
+        <button
+          className={`bg-teal-600 text-white p-2 rounded w-8 h-8 ${
+            isVisibilityPending && "bg-gray-400 cursor-waiting"
+          }`}
+          title={repo.archived ? "Unvarchive" : "Archive"}
+          onClick={() => mutateArchive(repo)}
+        >
+          {isArchivingPending ? (
+            "..."
+          ) : repo.archived ? (
+            <TbArchive />
+          ) : (
+            <TbArchiveOff />
+          )}
+        </button>
+        <button
+          className={`bg-teal-600 text-white p-2 rounded w-8 h-8 ${
+            isVisibilityPending && "bg-gray-400 cursor-waiting"
+          }`}
+          title={repo.private ? "Make public" : "Make private"}
+          onClick={() => mutateVisibility(repo)}
+        >
+          {isVisibilityPending ? (
+            "..."
+          ) : repo.private ? (
+            <FaEyeSlash />
+          ) : (
+            <FaEye />
+          )}
+        </button>
+      </div>
     </article>
   );
 };
