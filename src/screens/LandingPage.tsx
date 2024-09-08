@@ -9,15 +9,15 @@ export const LandingPage = () => {
   return (
     <div className="flex flex-col items-center justify-center text-center gap-4 h-full">
       <h1 className="font-bold text-4xl">
-        Spend less time toggling <br /> your repository's visibility
+        Effortlessly manage <br /> your github repositories
       </h1>
-      <p>RVT help you do just that.</p>
+      <p>Archive a repository or toggle its visibility in one click 😉.</p>
       {!session ? (
         <button
           className="bg-teal-600 rounded-lg py-3 px-6 text-white"
           onClick={() => signIn()}
         >
-          Login with your Github account to try it.
+          Sign in with your Github account to try it.
         </button>
       ) : (
         <button
