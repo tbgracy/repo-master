@@ -45,6 +45,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     return newSession;
   };
 
+  console.log(appUrl);
+  
+
   const signIn = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "github",
