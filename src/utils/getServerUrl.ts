@@ -1,8 +1,9 @@
 export const getServerUrl = () => {
-  const VERCEL_URL = import.meta.env.VERCEL_URL;
+  const VITE_VERCEL_URL = import.meta.env.VITE_VERCEL_URL;
   const VITE_APP_URL = import.meta.env.VITE_APP_URL;
-  if (VERCEL_URL) {
-    return `http://${VERCEL_URL}`;
+
+  if (VITE_VERCEL_URL) {
+    return `http://${VITE_VERCEL_URL}`;
   }
 
   if (VITE_APP_URL) {
