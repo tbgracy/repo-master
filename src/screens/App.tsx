@@ -57,20 +57,24 @@ export const App = () => {
   return (
     <>
       <Searchbar onSelect={handleSelect} onTyping={handleTyping} />
-      <section
-        className={`space-y-4 w-full md:space-y-0 p-4 flex-grow overflow-y-scroll 
+      {content.length >= 1 ? (
+        <section
+          className={`space-y-4 w-full md:space-y-0 p-4 flex-grow overflow-y-scroll 
       md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:max-w-[1980px] mx-auto`}
-      >
-        {error && <p>{error.message}</p>}
-        {content.length >= 1 ? content : <EmptyResult />}
-      </section>
+        >
+          {error && <p>{error.message}</p>}
+          {content}
+        </section>
+      ) : (
+        <EmptyResult />
+      )}
     </>
   );
 };
 
 const EmptyResult = () => {
   return (
-    <div className="flex flex-col h-full items-center justify-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-4">
       <img src={noResultImage} className="size-[10rem]" />
       <p>No repository found.</p>
     </div>
