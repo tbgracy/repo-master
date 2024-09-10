@@ -77,7 +77,7 @@ export const Repository = (props: RepositoryProps) => {
         ))}
       </ul>
       <p className="text-sm">{repo.description}</p>
-      <div className="absolute right-2 top-0 space-x-2">
+      <div className="absolute right-2 top-0 space-x-2 flex items-center">
         <button
           className={`bg-teal-600 text-white p-2 rounded w-8 h-8 ${
             isVisibilityPending && "bg-gray-400 cursor-waiting"
