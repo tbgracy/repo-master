@@ -10,6 +10,11 @@ declare global {
         topics: string[],
         archived: boolean,
     }
+
+    export type Filter = {
+        keyword: string,
+        type?: "private" | "public" | "archived",
+    }
 }
 
 export { }
