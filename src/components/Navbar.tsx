@@ -22,7 +22,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="w-full bg-white p-3 flex items-center justify-between shadow-sm z-10">
+    <nav className="w-full bg-white p-3 flex items-center justify-between shadow z-10">
       <div className="flex items-center gap-2">
         <img src={shuriken} className="-rotate-[30deg] size-[2rem]" />
         <h1
