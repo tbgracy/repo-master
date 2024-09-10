@@ -2,14 +2,14 @@ import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { Repository, RepositorySkeleton } from "../components/Repository";
+import { Searchbar } from "../components/Searchbar";
 
 import { useAuth } from "../AuthProvider";
 
-import noResultImage from "../assets/void.svg";
-
 import { useGithubApi } from "../hooks/useGithubApi";
-import { Searchbar } from "../components/Searchbar";
 import { useSearchbar } from "../hooks/useSearchbar";
+
+import noResultImage from "../assets/void.svg";
 
 export const App = () => {
   const { session } = useAuth()!;
