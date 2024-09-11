@@ -27,7 +27,9 @@ export const Searchbar = (props: SearchbarProps) => {
         }}
       >
         {selectValues.map((v) => (
-          <option value={v}>{v}</option>
+          <option key={v} value={v}>
+            {v}
+          </option>
         ))}
       </select>
     </div>
