@@ -25,7 +25,7 @@ export const useGithubApi = () => {
         });
 
         const result = await octokit.rest.repos.update({
-            owner: 'tbgracy',
+            owner: session?.user.user_metadata.preferred_username,
             repo: repo.name,
             visibility: repo.private ? 'public' : "private"
         })
