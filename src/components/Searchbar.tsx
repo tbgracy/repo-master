@@ -11,7 +11,7 @@ export const Searchbar = (props: SearchbarProps) => {
   return (
     <div className="mx-auto w-full md:w-[60%] md:absolute bg-white md:top-1 md:left-[50%] md:translate-x-[-50%] z-20 flex shadow md:shadow-none">
       <input
-        className="m-2 p-2 rounded border flex-grow outline-none"
+        className="m-2 mr-0 p-2 rounded md:rounded-l-full border flex-grow outline-none"
         type="text"
         placeholder="Find a repository ... "
         onChange={(e) => onTyping(e.target.value)}
@@ -19,7 +19,7 @@ export const Searchbar = (props: SearchbarProps) => {
       <select
         name=""
         id=""
-        className="m-2 p-2 rounded cursor-pointer"
+        className="m-2 md:ml-0 p-2 rounded md:rounded-r-full cursor-pointer"
         onChange={(e) => {
           const newValue = e.target.value.toLowerCase();
           if (newValue !== "all") onSelect(newValue as Filter["type"]);
