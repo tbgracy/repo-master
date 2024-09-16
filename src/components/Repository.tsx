@@ -1,5 +1,4 @@
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { TbArchive, TbArchiveOff } from "react-icons/tb";
+import { TbArchive, TbLock } from "react-icons/tb";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useGithubApi } from "../hooks/useGithubApi";
@@ -51,9 +50,33 @@ export const Repository = (props: RepositoryProps) => {
     },
   });
 
+  const handleArchiveToogle = () => {
+    if (
+      confirm(
+        `You're about to ${
+          repo.archived ? "unarchive" : "archive"
+        } the repository ${repo.name}`
+      )
+    ) {
+      mutateArchive(repo);
+    }
+  };
+
+  const handleVisibilityToggle = () => {
+    if (
+      confirm(
+        `You're about to make the repository ${repo.name} ${
+          repo.private ? "public" : "private"
+        }.`
+      )
+    ) {
+      mutateVisibility(repo);
+    }
+  };
+
   return (
     <article
-      className={`w-full relative space-y-2 bg-white shadow-sm rounded-lg px-6 py-4 md:h-[10rem] overflow-y-scroll ${
+      className={`w-full flex flex-col justify-between relative space-y-2 bg-white shadow-sm rounded-lg p-6 md:h-[10rem] overflow-y-scroll ${
         isVisibilityPending && "cursor-wait"
       }`}
     >
@@ -66,6 +89,10 @@ export const Repository = (props: RepositoryProps) => {
       <h1 className="font-bold text-teal-600 w-[80%] text-ellipsis">
         {repo.name}
       </h1>
+      <div className="absolute right-[1rem] top-[1rem] flex text-gray-500">
+        {repo.private && <TbLock title="Private" size={"1.2rem"} />}{" "}
+        {repo.archived && <TbArchive title="Archived" size={"1.2rem"} />}
+      </div>
       <ul className="flex gap-2 w-full flex-wrap">
         {repo.topics.map((t, k) => (
           <li
@@ -76,37 +103,27 @@ export const Repository = (props: RepositoryProps) => {
           </li>
         ))}
       </ul>
-      <p className="text-sm">{repo.description}</p>
-      <div className="absolute right-2 top-0 space-x-2 flex items-center">
+      <p className="text-sm ">{repo.description}</p>
+      <div className="grid grid-cols-2 gap-2 w-[15rem] ml-auto">
         <button
-          className={`bg-teal-600 text-white p-2 rounded w-8 h-8 ${
+          className={`bg-gray-200 hover:bg-teal-600 hover:text-white duration-200 p-2 rounded ${
             isVisibilityPending && "bg-gray-400 cursor-waiting"
           }`}
-          title={repo.archived ? "Unvarchive" : "Archive"}
-          onClick={() => mutateArchive(repo)}
+          onClick={handleArchiveToogle}
         >
-          {isArchivingPending ? (
-            "..."
-          ) : repo.archived ? (
-            <TbArchive />
-          ) : (
-            <TbArchiveOff />
-          )}
+          {isArchivingPending ? "..." : repo.archived ? "Unarchive" : "Archive"}
         </button>
         <button
-          className={`bg-teal-600 text-white p-2 rounded w-8 h-8 ${
+          className={`bg-gray-200 hover:bg-teal-600 hover:text-white duration-200 p-2 rounded ${
             isVisibilityPending && "bg-gray-400 cursor-waiting"
           }`}
-          title={repo.private ? "Make public" : "Make private"}
-          onClick={() => mutateVisibility(repo)}
+          onClick={handleVisibilityToggle}
         >
-          {isVisibilityPending ? (
-            "..."
-          ) : repo.private ? (
-            <FaEyeSlash />
-          ) : (
-            <FaEye />
-          )}
+          {isVisibilityPending
+            ? "..."
+            : repo.private
+            ? "Make public"
+            : "Make private"}
         </button>
       </div>
     </article>
