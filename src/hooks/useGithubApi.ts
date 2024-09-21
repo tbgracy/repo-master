@@ -40,7 +40,9 @@ export const useGithubApi = () => {
 
         const result = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
 
-        return result as Repository[]
+        const filteredResult = result.filter(r => r.owner.login === session?.user.user_metadata.preferred_username)
+
+        return filteredResult as Repository[]
     }
 
     return { toggleVisibility, toggleArchive, fetchRepositories }
