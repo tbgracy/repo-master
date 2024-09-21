@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { Repository, RepositorySkeleton } from "../components/Repository";
+import { ResultCount } from "../components/ResultCount";
 import { Searchbar } from "../components/Searchbar";
 
 import { useAuth } from "../AuthProvider";
@@ -57,6 +58,7 @@ export const App = () => {
   return (
     <>
       <Searchbar onSelect={handleSelect} onTyping={handleTyping} />
+      <ResultCount filter={filter} contentCount={content.length} />
       {content.length >= 1 ? (
         <section
           className={`space-y-4 w-full md:space-y-0 p-4 flex-grow overflow-y-scroll 
