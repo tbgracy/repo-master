@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Repository, RepositorySkeleton } from "../components/Repository";
 import { ResultCount } from "../components/ResultCount";
+import { EmptyResult } from "../components/EmptyResult";
 import { Searchbar } from "../components/Searchbar";
 
 import { useAuth } from "../AuthProvider";
@@ -10,7 +11,6 @@ import { useAuth } from "../AuthProvider";
 import { useGithubApi } from "../hooks/useGithubApi";
 import { useSearchbar } from "../hooks/useSearchbar";
 
-import noResultImage from "../assets/void.svg";
 
 export const App = () => {
   const { session } = useAuth()!;
@@ -61,7 +61,7 @@ export const App = () => {
       <ResultCount filter={filter} contentCount={content.length} />
       {content.length >= 1 ? (
         <section
-          className={`space-y-4 w-full md:space-y-0 p-4 flex-grow overflow-y-scroll 
+          className={`space-y-4 w-full h-full md:space-y-0 p-4 overflow-y-scroll 
       md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 lg:max-w-[1980px] mx-auto`}
         >
           {error && <p>{error.message}</p>}
@@ -74,11 +74,4 @@ export const App = () => {
   );
 };
 
-const EmptyResult = () => {
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <img src={noResultImage} className="size-[10rem]" />
-      <p>No repository found.</p>
-    </div>
-  );
-};
+
