@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../AuthProvider";
 
-import shuriken from "../assets/shuriken.svg";
+import logo from "../assets/logo.png";
 
 export const Navbar = () => {
   const auth = useAuth();
@@ -24,12 +24,12 @@ export const Navbar = () => {
   return (
     <nav className="w-full bg-white p-3 flex items-center justify-between shadow z-10">
       <div className="flex items-center gap-2">
-        <img src={shuriken} className="-rotate-[30deg] size-[2rem]" />
+        <img src={logo} className="size-[3rem]" />
         <h1
-          className="text-teal-600 font-bold text-xl cursor-pointer"
+          className="font-bold text-xl cursor-pointer"
           onClick={() => navigate("/")}
         >
-          Repo Master
+          RepoMaster
         </h1>
       </div>
       {session && (
